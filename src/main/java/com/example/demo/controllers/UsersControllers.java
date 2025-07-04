@@ -6,11 +6,10 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class UsersControllers {
     @Autowired
     private UsersServices usersServices;
@@ -20,11 +19,10 @@ public class UsersControllers {
         usersServices.createUser(users);
         return ResponseEntity.ok("created user successfully");
     }
-
     @PostMapping("/login")
     public ResponseEntity<String> logIn(@RequestBody Users usersLogin, HttpSession session){
-        usersServices.login(usersLogin);
-        session.setAttribute("userId", usersLogin.getUserId());
+        Users user = usersServices.login(usersLogin);
+        session.setAttribute("userId", user.getUserId());
         return ResponseEntity.ok("Log in successful");
     }
     @PostMapping("/logout")
